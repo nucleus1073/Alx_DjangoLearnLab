@@ -3,6 +3,8 @@ from django.shortcuts import render
 from .models import Book, Library  # Ensure that Library model is imported
 from .models import Library
 from django.views.generic.detail import DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 # Function-based view to list all books and their authors
 def list_books(request):
     # Retrieve all books from the database
