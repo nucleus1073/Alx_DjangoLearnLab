@@ -1,8 +1,8 @@
 # relationship_app/views.py
 from django.shortcuts import render
-from django.views.generic import DetailView
 from .models import Book, Library  # Ensure that Library model is imported
 from .models import Library
+from django.views.generic.detail import DetailView
 # Function-based view to list all books and their authors
 def list_books(request):
     # Retrieve all books from the database
