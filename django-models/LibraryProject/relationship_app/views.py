@@ -1,3 +1,9 @@
+from django.shortcuts import render
+from .models import Book
+
+def list_books(request):
+    books = Book.objects.all()  # Retrieve all books from the database
+    return render(request, 'list_books.html', {'books': books})
 from django.views.generic import DetailView
 from .models import Library
 
