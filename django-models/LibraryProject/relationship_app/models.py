@@ -1,36 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.shortcuts import render
-
-# Function to check if the user is an Admin
-def is_admin(user):
-    return user.userprofile.role == 'Admin'
-
-# Function to check if the user is a Librarian
-def is_librarian(user):
-    return user.userprofile.role == 'Librarian'
-
-# Function to check if the user is a Member
-def is_member(user):
-    return user.userprofile.role == 'Member'
-
-# Admin view (only accessible to Admin users)
-@user_passes_test(is_admin)
-def admin_view(request):
-    return render(request, 'relationship_app/admin_view.html')
-
-# Librarian view (only accessible to Librarians)
-@user_passes_test(is_librarian)
-def librarian_view(request):
-    return render(request, 'relationship_app/librarian_view.html')
-
-# Member view (only accessible to Members)
-@user_passes_test(is_member)
-def member_view(request):
-    return render(request, 'relationship_app/member_view.html')
 
 class UserProfile(models.Model):
     ROLE_CHOICES = [
