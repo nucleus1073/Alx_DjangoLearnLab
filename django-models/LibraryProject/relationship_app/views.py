@@ -1,5 +1,7 @@
+# relationship_app/views.py
 from django.shortcuts import render
-from .models import Book  # Make sure the Book model is imported
+from django.views.generic import DetailView
+from .models import Book, Library  # Import the necessary models
 
 # Function-based view to list all books and their authors
 def list_books(request):
@@ -9,8 +11,8 @@ def list_books(request):
     # Render the template and pass the books as context
     return render(request, 'relationship_app/list_books.html', {'books': books})
 
-
+# Class-based view for displaying library details along with books in that library
 class LibraryDetailView(DetailView):
-    model = Library
-    template_name = 'library_detail.html'
-    context_object_name = 'library'
+    model = Library  # This tells Django to use the Library model
+    template_name = "relationship_app/library_detail.html"  # Path to the template for the library detail page
+    context_object_name = "library"  # This is the context variable passed to the template
