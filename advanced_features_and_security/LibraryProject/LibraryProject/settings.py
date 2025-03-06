@@ -14,14 +14,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
-# Get environment variables
-DB_NAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_HOST = os.getenv('DB_HOST')
-DB_PORT = os.getenv('DB_PORT')
-
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&*piu^bmugx6-knb(=cz1s8qj4$$7*on%mk0hus4x%#ylo3tn^'
+SECRET_KEY = 'django-insecure-rn)a9k5=k^rb=zgbvbt5**ra(p42w(ta-@fyf8^3ob6h+38%s*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -48,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bookshelf.apps.BookshelfConfig'
+    'bookshelf',
 ]
 
 MIDDLEWARE = [
@@ -59,14 +52,20 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
+
+# Content Security Policies
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "https://trustedscripts.example.com")
+CSP_IMG_SRC = ("'self'", "https://trustedimages.example.com")
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,19 +81,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'LibraryProject.wsgi.application'
 
 
+# Database
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
 # Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -133,3 +138,51 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+"""
+ Security Configuration Section 
+"""
+# Prevent your site from being framed by other sites (protect against clickjacking)
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent browsers from MIME-sniffing a response away from the declared content-type
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable the browser’s XSS filtering and help prevent cross-site scripting attacks
+SECURE_BROWSER_XSS_FILTER = True
+
+
+"""
+ Securing Cookies 
+"""
+# Ensure CSRF cookie is only sent over HTTPS
+CSRF_COOKIE_SECURE = True
+
+# Ensure session cookie is only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+
+""" 
+Task 3: HTTPS Support
+"""
+# Redirect all non-HTTPS requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Instruct browsers to only access the site via HTTPS for the next year (31,536,000 seconds)
+SECURE_HSTS_SECONDS = 31536000
+
+# Include all subdomains in the HTTPS policy
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Allow the site to be preloaded in HSTS (HTTP Strict Transport Security) lists
+SECURE_HSTS_PRELOAD = True
+
+
+"""
+Secure Headers Implementation 
+"""
+# Tells Django to trust the 'X-Forwarded-Proto' header set by your proxy server.
+# This is necessary to recognize HTTPS requests forwarded by a proxy.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# The 'SECURE_PROXY_SSL_HEADER' setting specifies that the header 'X-Forwarded-Proto' will be used to detect whether the original request was over HTTPS. The value 'https' tells Django to consider the request secure if 'X-Forwarded-Proto' is set to 'https'.
