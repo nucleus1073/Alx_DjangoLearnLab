@@ -5,11 +5,11 @@ from .views import BookList, BookViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(include("api.urls", "api")),  # Include the api.urls for routing to the api app
+    path('api/', include('api.urls')),  # Include the api.urls for routing to the api app
 ]
-
 # Set up the router for the viewset
 router = DefaultRouter()
 router.register(r'books', BookViewSet)
