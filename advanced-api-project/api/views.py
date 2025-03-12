@@ -81,7 +81,6 @@ class UpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()  # Fetch all books
     serializer_class = BookSerializer  # Serialize the books data
 
-
 # API View for deleting a book, authentication required
 class DeleteView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [TokenAuthentication]  # Use token-based authentication
