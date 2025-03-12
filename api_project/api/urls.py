@@ -7,8 +7,6 @@ router = DefaultRouter()
 router.register(r'books', BookViewSet)
 
 urlpatterns = [
-     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # Include the api.urls for routing to the api app
     path('', include(router.urls)),
     path('books/', BookList.as_view(), name='book-list'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'), # Token authentication endpoint
