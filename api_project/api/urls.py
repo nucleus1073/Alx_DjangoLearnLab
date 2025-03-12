@@ -7,7 +7,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),  # Include the api.urls for routing to the api app
+    path(include("api.urls", "api")),  # Include the api.urls for routing to the api app
 ]
 
 # Set up the router for the viewset
