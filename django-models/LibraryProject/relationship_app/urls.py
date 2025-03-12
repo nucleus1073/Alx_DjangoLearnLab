@@ -25,7 +25,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='relationship_app/logout.html'), name='logout'),  # User logout view with template
     
     # Custom role-based views with updated paths
-    path('admin-dashboard/', views.admin_view, name='admin_view'),
-    path('librarian-dashboard/', views.librarian_view, name='librarian_view'),
-    path('member-dashboard/', views.member_view, name='member_view'),
+    path('admin-dashboard/', views.admin_view, name='Admin_view'),
+    path('librarian-dashboard/', views.librarian_view, name='Librarian_view'),
+    path('member-dashboard/', views.member_view, name='Member_view'),
 ]
